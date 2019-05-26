@@ -38,10 +38,22 @@ module Bots::Apis
       nil
     end
 
+    # Get keys of storage data.
+    # @return [Boolean] true if success.
+    def delete(key)
+      storage_hash.tap do |storage|
+        storage.delete(key.to_s)
+        @bot.storage.update!(content: storage.to_json)
+      end
+      true
+    rescue
+      false
+    end
+
     # Clear Storage.
     # @note This argument is necessary to recognize it to be a function.
     # @return [Boolean] true if success.
-    def clear(dummy=true)
+    def clear(dummy = true)
       @bot.storage.update!(content: '{}')
       true
     rescue
